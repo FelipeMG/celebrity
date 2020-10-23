@@ -2,8 +2,8 @@ package com.felipemg.celebrity;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class CelebrityTest {
 
@@ -25,6 +25,13 @@ public class CelebrityTest {
     public void partyWithoutCelebrityShouldReturnMinus1(){
         int N = 4;
         int[][] matrix = {{0,0,1,0},{0,0,1,0},{0,1,0,0},{0,0,1,0}};
+        assertThat(Celebrity.findCelebrity(N,matrix), is(-1));
+    }
+
+    @Test
+    public void partyWithPersonKnownByAlmostEverybodyShouldReturnMinus1(){
+        int N = 4;
+        int[][] matrix = {{0,0,1,0},{0,0,1,0},{0,0,0,0},{0,1,0,0}};
         assertThat(Celebrity.findCelebrity(N,matrix), is(-1));
     }
 }

@@ -9,46 +9,46 @@ public class Celebrity {
 
     static Map<String, List<Integer>> people;
 
-    public static Map<String, List<Integer>> initializePeople(int N, int[][] peopleInParty) {
+    public static int findCelebrity(int N, int[][] matrix) {
 
-        Map<String, List<Integer>> people = new HashMap<String, List<Integer>>();
-        for (int person = 0; person < N; person++) {
-            List<Integer> knownPeople = new ArrayList<Integer>();
-            for (int knownPerson = 0; knownPerson < N; knownPerson++) {
-                if (peopleInParty[person][knownPerson] == 1) {
-                    knownPeople.add(knownPerson);
+        int celebrity = -1;
+        int person = 0;
+        for (; person < N; person++) {
+            if (matrix[0][person] == 1) {
+                if (isKnownByEverybody(N, matrix, person) && knowsNobody(N, matrix, person)) {
+                    celebrity = person;
+                    break;
                 }
             }
-            people.put(String.valueOf(person), knownPeople);
         }
-        return people;
-    }
-
-    public static int findCelebrity(int N, int[][] matrix){
-        people = initializePeople(N, matrix);
-        int celebrity = -1;
-        for (int person = 0; person < N; person++) {
-            if(people.get(String.valueOf(person)).isEmpty()){
-                if(isKnownByEverybody(N,person)){
-                    celebrity = person;
-                }
-                break;
+        if (person == N) {
+            if (isKnownByEverybody(N, matrix, 0)) {
+                celebrity = 0;
             }
         }
         return celebrity;
     }
 
-    public static boolean isKnownByEverybody(int N, int celebrity) {
+    private static boolean isKnownByEverybody(int N, int[][] matrix, int person) {
         boolean isKnown = true;
-        for (int person = 0; person < N; person++) {
-            if(person != celebrity) {
-                if(!knows(person,celebrity)){
-                    isKnown = false;
-                    break;
-                }
+        for (int guest = 0; guest < N; guest++) {
+            if (guest != person && matrix[guest][person] == 0) {
+                isKnown = false;
+                break;
             }
         }
         return isKnown;
+    }
+
+    private static boolean knowsNobody(int N, int[][] matrix, int person) {
+        boolean knowsNobody = true;
+        for (int guest = 0; guest < N; guest++) {
+            if (matrix[person][guest] == 1) {
+                knowsNobody = false;
+                break;
+            }
+        }
+        return knowsNobody;
     }
 
     public static boolean knows(int personA, int personB) {
